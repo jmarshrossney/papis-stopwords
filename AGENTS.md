@@ -12,7 +12,6 @@ It exists to make citation keys readable: `ref-format` needs a few title words t
 src/papis_stopwords/
   __init__.py      — the whole plugin: StopwordFormatter + spec parsing
 tests/             — one test file
-UPSTREAM.md        — draft feature request for papis itself (not yet filed)
 ```
 
 ## Commands
@@ -36,14 +35,17 @@ Setup: `uv sync --group dev`.
 
 **This plugin subclasses papis private API** — `papis.format.python._PythonStringFormatter`.
 
-That is deliberate. Subclassing is what makes the plugin a strict superset of the built-in formatter: every stock pattern keeps working, and only the additions are new. Reimplementing `format_field` from scratch would drift from papis on every upstream change.
+That is deliberate.
+Subclassing is what makes the plugin a strict superset of the built-in formatter: every stock pattern keeps working, and only the additions are new.
+Reimplementing `format_field` from scratch would drift from papis on every upstream change.
 
 The cost is that a papis release can break it silently. Two guards exist:
 
 - `dependencies = ["papis>=0.15,<0.17"]` — an explicit upper bound.
 - `test_private_papis_api_is_still_present` — a canary test that fails with a clear message if the class moves.
 
-**Raising the papis upper bound requires running `just test-papis <version>` first**, and adding the version to the `papis-versions` matrix in `.github/workflows/ci.yml`. Do not raise it on the strength of `uv sync` succeeding.
+**Raising the papis upper bound requires running `just test-papis <version>` first**, and adding the version to the `papis-versions` matrix in `.github/workflows/ci.yml`.
+Do not raise it on the strength of `uv sync` succeeding.
 
 ## Design constraints worth not rediscovering
 
@@ -51,10 +53,3 @@ The cost is that a papis release can break it silently. Two guards exist:
 - **Order matters and is free.** `convert_field` runs before `format_field`, so `!t` has already applied when stopwords are dropped, and stopwords are dropped before the slice — three words in means three *useful* words out.
 - **`python-slugify` is a dead end.** It already accepts `stopwords=` and `ref_cleanup` already calls it, which makes it look like a five-line fix. It runs after truncation, is case-sensitive when `lowercase=False`, and splits on the separator, which is empty in a `ref-word-separator =` setup.
 - **The separator is not cosmetic.** Building a key from several single-word slices leaves a dangling separator when the title is short (`LeCun2015_Deep_Learning_`); joining inside one slice makes the empty slot impossible.
-
-## Deviations from the standard package template
-
-- `requires-python = ">=3.10"` rather than `>=3.12`, to match papis' own floor — the plugin only ever runs inside a papis environment.
-- No `docs/`, `examples/`, or publish workflow: this is a single-module plugin expected to be superseded upstream.
-- Licensed GPL-3.0-or-later rather than MIT, because it imports and subclasses papis, which is GPL-3.0-or-later.
-- An extra `papis-versions` CI job, for the private-API reason above.
