@@ -133,3 +133,25 @@ def test_private_papis_api_is_still_present():
     assert issubclass(StopwordFormatter, PythonFormatter)
     assert isinstance(StopwordFormatter.psf, _PythonStringFormatter)
     assert StopwordFormatter.name == "stopwords"
+
+
+def test_version_matches_pyproject() -> None:
+    """The installed metadata agrees with pyproject.toml.
+
+    ``__version__`` is derived from the installed distribution, so this catches
+    a stale editable install -- which is how the version came to be reported as
+    0.2.0 while pyproject.toml still said 0.1.0.
+
+    pyproject.toml is read with a regex rather than ``tomllib`` because the
+    package supports Python 3.10, where ``tomllib`` is not in the standard
+    library and pulling in ``tomli`` for one assertion is not worth it.
+    """
+    import re
+    from pathlib import Path
+
+    import papis_stopwords
+
+    pyproject = (Path(__file__).parent.parent / "pyproject.toml").read_text()
+    match = re.search(r'^version = "([^"]+)"', pyproject, re.MULTILINE)
+    assert match is not None, "no version found in pyproject.toml"
+    assert papis_stopwords.__version__ == match.group(1)

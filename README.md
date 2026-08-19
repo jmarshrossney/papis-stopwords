@@ -74,8 +74,8 @@ Setting it to `[]` turns the `N` flag into a no-op without editing any format pa
 
 | papis | status |
 | --- | --- |
-| 0.15.0 | tested, 19/19 |
-| 0.16.0 | tested, 19/19 — `_PythonStringFormatter.format_field` is byte-identical to 0.15 |
+| 0.15.0 | tested, 20/20 |
+| 0.16.0 | tested, 20/20 — `_PythonStringFormatter.format_field` is byte-identical to 0.15 |
 
 papis requires Python >= 3.10, and this plugin matches that floor rather than setting its own.
 

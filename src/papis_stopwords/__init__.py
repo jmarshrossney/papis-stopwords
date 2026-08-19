@@ -23,12 +23,19 @@ Both are optional and may be combined, in the order ``[start][.end][N]['sep']S``
 
 from __future__ import annotations
 
+from importlib.metadata import PackageNotFoundError, version
 from typing import Any, ClassVar
 
 import papis.config
 from papis.format.python import PythonFormatter, _PythonStringFormatter
 
-__version__ = "0.2.0"
+try:
+    # Derived rather than duplicated: pyproject.toml is the only place the
+    # version is written. Keeping a literal here as well let the two drift
+    # apart once already.
+    __version__ = version("papis-stopwords")
+except PackageNotFoundError:  # pragma: no cover - source tree, not installed
+    __version__ = "0.0.0+unknown"
 
 __all__ = ["DEFAULT_STOPWORDS", "StopwordFormatter"]
 
