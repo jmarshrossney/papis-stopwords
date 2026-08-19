@@ -11,8 +11,9 @@ It adds two options to the existing `S` word-slice spec, in the order `[start][.
 - **`N`** filters stopwords out of the field *before* the slice is taken.
 - **`'sep'`** joins the selected words with `sep` instead of a single space.
 
-> [!WARNING] This plugin subclasses `papis.format.python._PythonStringFormatter`, which is private API.
-> That is deliberate — it is what makes the plugin a strict superset of the built-in formatter rather than a reimplementation — but it means a papis release can break it without warning.
+> [!WARNING]
+> This plugin subclasses `papis.format.python._PythonStringFormatter`, which is private API.
+> This means a papis release can break it without warning.
 > Tested against papis 0.15.0 and 0.16.0.
 
 
@@ -33,7 +34,7 @@ Joining inside a single slice removes the empty slot entirely, because the separ
 
 Not published to PyPI; install from the repository:
 
-```console
+```sh
 uv tool install papis --with git+https://github.com/jmarshrossney/papis-stopwords
 ```
 
@@ -41,7 +42,7 @@ uv tool install papis --with git+https://github.com/jmarshrossney/papis-stopword
 If your papis install already has extras (`citeproc-py` for CSL output, say), repeat them in the same command or they will be
 dropped:
 
-```console
+```sh
 uv tool install papis --with citeproc-py \
   --with git+https://github.com/jmarshrossney/papis-stopwords
 ```
@@ -80,13 +81,13 @@ papis requires Python >= 3.10, and this plugin matches that floor rather than se
 
 To run the suite against a specific papis release:
 
-```console
+```sh
 just test-papis 0.16.0
 ```
 
 ## Development
 
-```console
+```sh
 uv sync --group dev
 just              # lint, typecheck, test
 ```
