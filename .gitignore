@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.egg-info/
+.venv/
+venv/
+dist/
+
+# Tooling caches
+.cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.json
+
+# Scratch space
+notes/
+tmp/
+
+# OS
+.DS_Store
+
+UPSTREAM.md
